@@ -15,7 +15,7 @@ struct Upload {
 
     #[serde(default, skip_serializing_if = "Option::is_none")]
     #[structopt(short, long)]
-    pub metadata: Option<PathBuf>,
+    pub metadata_json: Option<PathBuf>,
 }
 
 #[derive(StructOpt)]
@@ -74,7 +74,7 @@ async fn main() -> anyhow::Result<()> {
             let release = std::fs::read_to_string(upload.release_meta_path)?;
             let mut release: Release = toml::from_str(&release)?;
 
-            if let Some(path) = upload.metadata {
+            if let Some(path) = upload.metadata_json {
                 names_and_descs(&mut release, &path)
                     .with_context(|| format!("could not read metadata from {path:?}"))?;
             }
